@@ -1,5 +1,6 @@
 const fs = require('fs')
 const http = require("http")
+const url = require("url")
 // const data = fs.readFileSync("./txt/input.txt", "utf-8")
 // console.log(data)
 // const newText = `I will add this inside you ${data}.\nWhat is the dirrerence ${Date.now()}`
@@ -22,8 +23,11 @@ const server = http.createServer((req, res) => {
     } else if (pathName === "/product") {
         res.end("this is the prodct")
     } else {
-        res.writeHead(404)
-        res.end("Page not found 404")
+        res.writeHead(404, {
+            'Content-type': "text/html",
+            'custom-header': "my-own-header"
+        })
+        res.end("<h1>Page not found 404</h1>")
     }
 })
 server.listen('8000', '127.0.0.1', () => {
