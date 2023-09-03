@@ -16,13 +16,22 @@ const url = require("url")
 
 ///////////////////////////////////
 //////// SERVER
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8")
+const dataObject = JSON.parse(data)
+
 const server = http.createServer((req, res) => {
     const pathName = req.url
     if (pathName === "/" ||  pathName === "/overview") {
          res.end("this is the overview")
     } else if (pathName === "/product") {
         res.end("this is the prodct")
-    } else {
+    } else if (pathName === "/api") {
+        res.writeHead(200, {
+            "Content-type": "application/json"
+        })
+        res.end(data)
+    }
+     else {
         res.writeHead(404, {
             'Content-type': "text/html",
             'custom-header': "my-own-header"
