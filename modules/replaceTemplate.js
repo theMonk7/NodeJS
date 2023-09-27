@@ -9,6 +9,6 @@ module.exports = replaceTemplate = (tempCard, data) => {
     output = output.replace(/{%FROM%}/g, data.from)
     output = output.replace(/{%NUTRIENTSNAME%}/g, data.nutrients)
     
-    if (!product.organic) output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic")
+    if (!data.organic) output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic")
     return output
 }

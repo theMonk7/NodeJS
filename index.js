@@ -1,6 +1,7 @@
 const fs = require('fs')
 const http = require("http")
 const url = require("url")
+const slugify = require('slugify')
 const replaceTemplate = require("./modules/replaceTemplate")
 
 ///////////////////////////////////
@@ -14,8 +15,13 @@ const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8")
 const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, "utf-8")
 const tempCard = fs.readFileSync(`${__dirname}/templates/template-card.html`, "utf-8")
 const product = fs.readFileSync(`${__dirname}/templates/template-product.html`, "utf-8")
-const dataObject = JSON.parse(data)
-
+let dataObject = JSON.parse(data)
+dataObject = dataObject.map((val, idx, arr) => {
+    const a = slugify(val.productName, {lower: true})
+    val.id = a
+    return val
+})
+console.log("yoyoyoy",dataObject)
 const server = http.createServer((req, res) => {
     const {query, pathname} = url.parse(req.url, true)
     // OVERVIEW PAGE
@@ -30,7 +36,7 @@ const server = http.createServer((req, res) => {
     // PRODUCTS PAGE
     } else if (pathname === "/product") {
         const {id} = query
-        const requiredData = dataObject[id]
+        const requiredData = dataObject.find((val) => val.id === id)
         let htmlContent = ""
         if (requiredData !== undefined) {
             htmlContent = replaceTemplate(product, requiredData)
